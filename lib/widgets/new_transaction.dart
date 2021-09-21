@@ -59,63 +59,70 @@ class _NewTransactionState extends State<NewTransaction> {
       choosenDate =
           'Picked date: ' + DateFormat('dd / MMM / yyyy').format(_selectDate!);
     }
-    return Card(
-      elevation: 5,
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            TextField(
-              controller: _titleController,
-              decoration: const InputDecoration(
-                labelText: 'Title',
+    return SingleChildScrollView(
+      child: Card(
+        elevation: 5,
+        child: Container(
+          padding: EdgeInsets.only(
+            top: 10,
+            left: 10,
+            right: 10,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              TextField(
+                controller: _titleController,
+                decoration: const InputDecoration(
+                  labelText: 'Title',
+                ),
+                onSubmitted: (_) => _submitData(),
+                autofocus: true,
               ),
-              onSubmitted: (_) => _submitData(),
-              autofocus: true,
-            ),
-            TextField(
-              controller: _amountController,
-              decoration: const InputDecoration(
-                labelText: 'Amount',
+              TextField(
+                controller: _amountController,
+                decoration: const InputDecoration(
+                  labelText: 'Amount',
+                ),
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                onSubmitted: (_) => _submitData(),
               ),
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
-              ),
-              onSubmitted: (_) => _submitData(),
-            ),
-            SizedBox(
-              height: 70,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(choosenDate),
-                  ),
-                  TextButton(
-                    onPressed: _presentDayPicker,
-                    child: Text(
-                      'Choose different date',
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.bold,
+              SizedBox(
+                height: 70,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(choosenDate),
+                    ),
+                    TextButton(
+                      onPressed: _presentDayPicker,
+                      child: Text(
+                        'Choose different date',
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            ElevatedButton(
-              onPressed: _submitData,
-              style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).primaryColor),
-              child: Text(
-                'Add transaction',
-                style: TextStyle(
-                  color: Theme.of(context).textTheme.button!.color,
+                  ],
                 ),
               ),
-            )
-          ],
+              ElevatedButton(
+                onPressed: _submitData,
+                style: ElevatedButton.styleFrom(
+                    primary: Theme.of(context).primaryColor),
+                child: Text(
+                  'Add transaction',
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.button!.color,
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

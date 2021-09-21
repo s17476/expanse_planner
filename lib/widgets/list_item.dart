@@ -35,13 +35,27 @@ class ListItem extends StatelessWidget {
             color: Colors.grey,
           ),
         ),
-        trailing: IconButton(
-          onPressed: () => delete(tx.id),
-          icon: Icon(
-            Icons.delete,
-            color: Theme.of(context).errorColor,
-          ),
-        ),
+        trailing: MediaQuery.of(context).size.width > 460
+            ? TextButton.icon(
+                onPressed: () => delete(tx.id),
+                label: Text(
+                  'Delete',
+                  style: TextStyle(
+                    color: Theme.of(context).errorColor,
+                  ),
+                ),
+                icon: Icon(
+                  Icons.delete,
+                  color: Theme.of(context).errorColor,
+                ),
+              )
+            : IconButton(
+                onPressed: () => delete(tx.id),
+                icon: Icon(
+                  Icons.delete,
+                  color: Theme.of(context).errorColor,
+                ),
+              ),
       ),
     );
   }
