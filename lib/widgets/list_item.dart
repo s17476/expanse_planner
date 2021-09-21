@@ -1,6 +1,7 @@
-import 'package:expense_planner/models/transaction.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+import 'package:expense_planner/models/transaction.dart';
 
 class ListItem extends StatelessWidget {
   final Transaction tx;

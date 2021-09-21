@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class NewTransaction extends StatefulWidget {
-  Function addTransaction;
+  final Function addTransaction;
 
-  NewTransaction(this.addTransaction, {Key? key}) : super(key: key);
+  const NewTransaction(this.addTransaction, {Key? key}) : super(key: key);
 
   @override
   State<NewTransaction> createState() => _NewTransactionState();

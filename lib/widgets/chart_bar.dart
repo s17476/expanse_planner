@@ -22,10 +22,10 @@ class ChartBar extends StatelessWidget {
             child: Text('\$${spendningAmount.toStringAsFixed(0)}'),
           ),
         ),
-        Container(
+        const SizedBox(
           height: 4,
         ),
-        Container(
+        SizedBox(
           height: 60,
           width: 10,
           child: Stack(
