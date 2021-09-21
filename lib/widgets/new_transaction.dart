@@ -19,9 +19,7 @@ class _NewTransactionState extends State<NewTransaction> {
     final enteredTitle = _titleController.text;
     double enteredAmount = 0;
 
-    if (enteredTitle.isEmpty ||
-        _amountController.text.isEmpty ||
-        _selectDate == null) return;
+    if (enteredTitle.isEmpty || _amountController.text.isEmpty) return;
 
     enteredAmount = double.parse(_amountController.text);
 
@@ -52,6 +50,15 @@ class _NewTransactionState extends State<NewTransaction> {
 
   @override
   Widget build(BuildContext context) {
+    String choosenDate;
+    if (_selectDate == null) {
+      _selectDate = DateTime.now();
+      choosenDate =
+          'Current date: ' + DateFormat('dd / MMM / yyyy').format(_selectDate!);
+    } else {
+      choosenDate =
+          'Picked date: ' + DateFormat('dd / MMM / yyyy').format(_selectDate!);
+    }
     return Card(
       elevation: 5,
       child: Container(
@@ -82,18 +89,12 @@ class _NewTransactionState extends State<NewTransaction> {
               child: Row(
                 children: [
                   Expanded(
-                    child: Text(
-                      _selectDate == null
-                          ? 'No date choosen!'
-                          : 'Picked date: ' +
-                              DateFormat('dd / MMM / yyyy')
-                                  .format(_selectDate!),
-                    ),
+                    child: Text(choosenDate),
                   ),
                   TextButton(
                     onPressed: _presentDayPicker,
                     child: Text(
-                      'Choose date',
+                      'Choose different date',
                       style: TextStyle(
                         color: Theme.of(context).primaryColor,
                         fontWeight: FontWeight.bold,

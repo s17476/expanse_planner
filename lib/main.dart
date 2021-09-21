@@ -91,29 +91,41 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final appBar = AppBar(
+      title: const Text('Expanse Planner'),
+      actions: <Widget>[
+        IconButton(
+          onPressed: () => _showAddNewTransaction(context),
+          icon: const Icon(
+            Icons.add_circle_outline_sharp,
+            color: Colors.white,
+            size: 30,
+          ),
+          padding: const EdgeInsets.only(right: 15),
+        )
+      ],
+    );
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Expanse Planner'),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () => _showAddNewTransaction(context),
-            icon: const Icon(
-              Icons.add_circle_outline_sharp,
-              color: Colors.white,
-              size: 30,
-            ),
-            padding: const EdgeInsets.only(right: 15),
-          )
-        ],
-      ),
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Chart(recentTransactions: _recentTransactions),
-            TransactionList(
-              transactions: _transactions,
-              deleteTransaction: deleteTransaction,
+            SizedBox(
+                height: (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height -
+                        MediaQuery.of(context).padding.top) *
+                    0.25,
+                child: Chart(recentTransactions: _recentTransactions)),
+            SizedBox(
+              height: (MediaQuery.of(context).size.height -
+                      appBar.preferredSize.height -
+                      MediaQuery.of(context).padding.top) *
+                  0.75,
+              child: TransactionList(
+                transactions: _transactions,
+                deleteTransaction: deleteTransaction,
+              ),
             ),
           ],
         ),

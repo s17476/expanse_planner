@@ -13,7 +13,6 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 550,
       child: transactions.isEmpty
           ? Column(
               children: [
@@ -24,7 +23,13 @@ class TransactionList extends StatelessWidget {
                     style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
-                Image.asset('assets/img/waiting.png'),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  child: Image.asset(
+                    'assets/img/waiting.png',
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ],
             )
           : ListView.builder(
