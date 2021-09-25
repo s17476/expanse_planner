@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:expense_planner/widgets/chart.dart';
 import 'package:expense_planner/widgets/new_transaction.dart';
 import 'package:expense_planner/widgets/transaction_list.dart';
-import 'package:flutter/services.dart';
 import 'models/transaction.dart';
 
 void main() {
@@ -101,22 +100,61 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
-    final isLandscapeMode = mediaQuery.orientation == Orientation.landscape;
-    final PreferredSizeWidget appBar = Platform.isIOS
+  List<Widget> _buildLandscapeContent(MediaQueryData mediaQuery,
+      PreferredSizeWidget appBar, SizedBox txListView) {
+    return [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Schow Chart',
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          Switch.adaptive(
+            activeColor: Theme.of(context).colorScheme.secondary,
+            value: _schowChart,
+            onChanged: (val) {
+              setState(() {
+                _schowChart = val;
+              });
+            },
+          ),
+        ],
+      ),
+      _schowChart
+          ? SizedBox(
+              height: (mediaQuery.size.height -
+                      appBar.preferredSize.height -
+                      mediaQuery.padding.top) *
+                  0.7,
+              child: Chart(recentTransactions: _recentTransactions))
+          : txListView,
+    ];
+  }
+
+  List<Widget> _buildPortraitWidget(MediaQueryData mediaQuery,
+      PreferredSizeWidget appBar, SizedBox txListView) {
+    return [
+      SizedBox(
+          height: (mediaQuery.size.height -
+                  appBar.preferredSize.height -
+                  mediaQuery.padding.top) *
+              0.3,
+          child: Chart(recentTransactions: _recentTransactions)),
+      txListView,
+    ];
+  }
+
+  PreferredSizeWidget _buildAppBar() {
+    return Platform.isIOS
         ? CupertinoNavigationBar(
             middle: const Text('Expanse Planner'),
             trailing: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                IconButton(
-                  onPressed: () => _showAddNewTransaction(context),
-                  icon: const Icon(
-                    Icons.add_circle_outline_sharp,
-                    color: Colors.white,
-                    size: 30,
-                  ),
+                GestureDetector(
+                  child: const Icon(CupertinoIcons.add),
+                  onTap: () => _showAddNewTransaction(context),
                 ),
               ],
             ),
@@ -136,7 +174,13 @@ class _HomePageState extends State<HomePage> {
               )
             ],
           );
-    final txListView = SizedBox(
+  }
+
+  SizedBox _buildListView(
+    MediaQueryData mediaQuery,
+    PreferredSizeWidget appBar,
+  ) {
+    return SizedBox(
       height: (mediaQuery.size.height -
               appBar.preferredSize.height -
               mediaQuery.padding.top) *
@@ -146,45 +190,34 @@ class _HomePageState extends State<HomePage> {
         deleteTransaction: deleteTransaction,
       ),
     );
+  }
 
-    final pageBody = SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          if (isLandscapeMode)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('Schow Chart'),
-                Switch.adaptive(
-                  activeColor: Theme.of(context).colorScheme.secondary,
-                  value: _schowChart,
-                  onChanged: (val) {
-                    setState(() {
-                      _schowChart = val;
-                    });
-                  },
-                ),
-              ],
-            ),
-          if (!isLandscapeMode)
-            SizedBox(
-                height: (mediaQuery.size.height -
-                        appBar.preferredSize.height -
-                        mediaQuery.padding.top) *
-                    0.3,
-                child: Chart(recentTransactions: _recentTransactions)),
-          if (!isLandscapeMode) txListView,
-          if (isLandscapeMode)
-            _schowChart
-                ? SizedBox(
-                    height: (mediaQuery.size.height -
-                            appBar.preferredSize.height -
-                            mediaQuery.padding.top) *
-                        0.7,
-                    child: Chart(recentTransactions: _recentTransactions))
-                : txListView,
-        ],
+  @override
+  Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final isLandscapeMode = mediaQuery.orientation == Orientation.landscape;
+    final appBar = _buildAppBar();
+    final txListView = _buildListView(mediaQuery, appBar);
+
+    final pageBody = SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            if (isLandscapeMode)
+              ..._buildLandscapeContent(
+                mediaQuery,
+                appBar,
+                txListView,
+              ),
+            if (!isLandscapeMode)
+              ..._buildPortraitWidget(
+                mediaQuery,
+                appBar,
+                txListView,
+              ),
+          ],
+        ),
       ),
     );
 
