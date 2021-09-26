@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:expense_planner/widgets/chart.dart';
-import 'package:expense_planner/widgets/new_transaction.dart';
-import 'package:expense_planner/widgets/transaction_list.dart';
-import 'models/transaction.dart';
+import '../widgets/chart.dart';
+import '../widgets/new_transaction.dart';
+import '../widgets/transaction_list.dart';
+import '/models/transaction.dart';
 
 void main() {
   // Disable landscape mode
@@ -239,6 +239,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     onPressed: () => _showAddNewTransaction(context),
                     elevation: 5,
-                  ));
+                  ),
+          );
   }
 }
