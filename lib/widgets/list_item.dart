@@ -1,14 +1,36 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:expense_planner/models/transaction.dart';
 
-class ListItem extends StatelessWidget {
+class ListItem extends StatefulWidget {
   final Transaction tx;
   final Function delete;
 
   const ListItem({Key? key, required this.tx, required this.delete})
       : super(key: key);
+
+  @override
+  State<ListItem> createState() => _ListItemState();
+}
+
+class _ListItemState extends State<ListItem> {
+  late Color _bgColor;
+
+  @override
+  void initState() {
+    const availableColors = [
+      Colors.red,
+      Colors.purple,
+      Colors.black,
+      Colors.blue,
+    ];
+
+    _bgColor = availableColors[Random().nextInt(4)];
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,27 +39,28 @@ class ListItem extends StatelessWidget {
       elevation: 4,
       child: ListTile(
         leading: CircleAvatar(
+          backgroundColor: _bgColor,
           radius: 30,
           child: Padding(
             padding: const EdgeInsets.all(6.0),
             child: FittedBox(
-              child: Text('\$${tx.amount.toStringAsFixed(2)}'),
+              child: Text('\$${widget.tx.amount.toStringAsFixed(2)}'),
             ),
           ),
         ),
         title: Text(
-          tx.title,
+          widget.tx.title,
           style: Theme.of(context).textTheme.headline6,
         ),
         subtitle: Text(
-          DateFormat('yyyy MMM dd').format(tx.date),
+          DateFormat('yyyy MMM dd').format(widget.tx.date),
           style: const TextStyle(
             color: Colors.grey,
           ),
         ),
         trailing: MediaQuery.of(context).size.width > 460
             ? TextButton.icon(
-                onPressed: () => delete(tx.id),
+                onPressed: () => widget.delete(widget.tx.id),
                 label: Text(
                   'Delete',
                   style: TextStyle(
@@ -50,7 +73,7 @@ class ListItem extends StatelessWidget {
                 ),
               )
             : IconButton(
-                onPressed: () => delete(tx.id),
+                onPressed: () => widget.delete(widget.tx.id),
                 icon: Icon(
                   Icons.delete,
                   color: Theme.of(context).errorColor,

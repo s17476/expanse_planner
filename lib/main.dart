@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import '../widgets/chart.dart';
 import '../widgets/new_transaction.dart';
@@ -61,7 +62,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   final List<Transaction> _transactions = [];
 
   bool _schowChart = false;
@@ -73,6 +74,23 @@ class _HomePageState extends State<HomePage> {
       ));
     }).toList();
   }
+
+  // @override
+  // void initState() {
+  //   WidgetsBinding.instance!.addObserver(this);
+  //   super.initState();
+  // }
+
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   print(state);
+  // }
+
+  // @override
+  // void dispose() {
+  //   WidgetsBinding.instance!.removeObserver(this);
+  //   super.dispose();
+  // }
 
   void _addTransaction(String title, double amount, DateTime date) {
     final newTx = Transaction(
